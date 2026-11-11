@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mizan - Tableau de bord des cours de l'or</title>
+      <meta
+      name="description"
+      content="Connexion d’une application Web à des services et données externes"
+    />
+    <link rel="stylesheet" href="src/style.css" />
+    <script type="module" src="src/main.js" defer></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <p class="logo">Mizan</p>
+            <p class="header-description">
+                Tableau de bord des cours de l'or</p>
+      </div>
+    </header>
+
+<main>
+    <div class="header-info">
+
+            <span id="connection-status">
+                Vérification de la connexion...
+            </span>
+
+        </div>
+
+<!-- section des prix -->
+<section class="prices-section">
+
+<div>
+    <div>
+        <h2>Cours du marché</h2>
+        <p>Consultez les prix actueks de l'or et de l'argent.</p>
+    </div>
+
+    <div class="currency-control">
+        <label for="currency-control">Devise :</label>
+
+    <select id="currency-select">
+        <option value="MAD">MAD</option>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+    </select>
+    </div>
+</div>
+
+<!-- informations de mise a jour -->
+ <div class="update-info">
+    <p>
+        Dernière mise à jour :
+        <span id="last-update">--</span>
+    </p>
+
+    <button id="refresh-button" type="button">
+        Actualiser
+    </button>
+ </div>
+
+ <!-- message de chargement -->
+  <p id="loading-message" class="loading-message" hidden>Chargement des cours...</p>
+<!-- message de succès -->
+ <p id="success-message" class="success-message" hidden>Les cours ont été actualisés avec succès.</p>
+
+<!-- essage d'erreur -->
+ <div id="error-message" class="error-message" role="alert" hidden>
+    <p id="error-text">
+        Impossible de récupérer les cours.
+    </p>
+    <button id="retry-button" type="button">
+        Réssayer
+    </button>
+ </div>
+
+ <!-- cartes des métaux -->
+ <div id="prices-container" class="prices-container">
+     <!-- les cartes des métaux seront créées par JavaScript -->
+ </div>
+ 
+</section>
+
+<!-- section historique -->
+<section class="history-section">
+    <div class="section-heder">
+        <div>
+            <h2>Historique des prix</h2>
+            <p>Consultez l'évolution des cours.</p>
+        </div>
+    </div>
+
+    <div class="history-controls">
+        <div class="form-group">
+            <label for="history-metal">Choisir un métal</label>
+            <select id="history-metal">
+                <!-- Option générees par JavaScript -->
+            </select>
+        </div>
+
+            <div class="form-group">
+
+            <label for="history-period">Périod</label>
+            <select id="history-period">
+                <option value="7">7 derniers jours</option>
+                <option value="30">30 derniers jours</option>
+            </select>
+        </div>
+
+        <button id="history-button" type="button">
+            Afficher
+        </button>
+    </div>
+    <!-- message historique -->
+     <p id="history-message" hidden></p>
+
+<!-- Graphique -->
+ <div class="chart-container">
+    <canvas
+    id="history-chart"
+    aria-label="Graphique de l'évomution des prix"
+    role="img">  
+    </canvas>
+ </div>
+</section>
+
+<!-- section estimateur -->
+ <section class="calculator-section">
+    <div class="section-header">
+        <div>
+            <h2>Estimateur de bijou</h2>
+            <p>Estimez la valeur des votre bijou selon son poids</p>
+        </div>
+    </div>
+
+    <form id="calculator-form">
+        <!-- coix du métal -->
+         <div class="form-group">
+            <label for="calculator-metal">
+                Coisir un métal
+            </label>
+
+            <select id="calculator-metal" required>
+                <!-- options générees par JavaScript -->
+            </select>
+         </div>
+
+         <!-- poid -->
+          <div class="form-group">
+            <label for="weight">
+                Poids en grammes
+            </label>
+            <input type="number"
+                    id="weight"
+                    placeholder="Exemple : 10"
+                    min="0"
+                    step="any"
+                >
+
+                <small id="weight-error" class="field-error"></small>
+                    
+          </div>
+
+          <!-- bouton calcul -->
+           <button id="calculate-button" type="submit">
+                Calculer la valeur
+           </button>
+    </form>
+
+    <!-- résultat -->
+     <div id="calculator-result" class="calculator-result" hidden>
+        <p>Valeur estimée :</p>
+        <h3 id="estimated-price">--</h3>
+     </div>
+ </section>
+
+ <!-- Journal des requetes -->
+  <section class="request-section">
+    <details>
+        <summary>Journal des requetes</summary>
+        <div id="requests-log">
+            <!-- Les requetes seront ajoutées par JavaScript -->
+        </div>
+    </details>
+  </section>
+</main>
+  <!-- footer -->
+   <footer class="footer">
+    <p>
+        Mizan - tableau de bord des cours des métaux précieux
+    </p>
+
+    <p>
+        Données fournies par Goldprice.dev
+    </p>
+   </footer>
+
+ 
+
+</body>
+</html>

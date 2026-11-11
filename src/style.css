@@ -1,0 +1,132 @@
+
+@import "tailwindcss";
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Couleurs du projet */
+:root {
+    --mizan-bg: #F5F5F0;
+    --mizan-white: #FFFFFF;
+    --mizan-gold: #B58A32;
+    --mizan-encre: #292929;
+    --mizan-gray: #777777;
+    --mizan-green: #36834B;
+    --mizan-red: #D34B4B;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+/* Body */
+body {
+    background-color: var(--mizan-bg);
+    color: var(--mizan-encre);
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    
+}
+
+/* Container */
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+.main-header {
+    background-color: white;
+    padding: 15px 5%;
+    border-bottom: 2px solid #B58A32;
+
+}
+.header-container {
+    max-width: 1100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-description {
+    color: var(--mizan-gray);
+}
+.logo {
+    color: goldenrod;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size:xx-large;
+    font-weight: bold;
+}
+main {
+    width: 90%;
+    max-width: 1100px;
+    margin: 30px auto;
+}
+section {
+    background-color: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+}
+h2 {
+    color: #B58A32;
+    margin-bottom: 5px;
+}
+section p {
+    color: var(--mizan-gray);
+}
+
+.currency-control {
+    margin-top: 20px;
+}
+
+select, input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-color: 6px;
+    margin-top: 5px;
+}
+
+.update-info {
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    margin: 20px 0;
+}
+
+button {
+    background-color: var(--mizan-gold);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-message: #967096;
+}
+
+.loading-message {
+    color: var(--mizan-gray);
+}
+
+.success-message {
+    color: var(--mizan-green)
+}
+
+.error-message {
+    color: red;
+    padding: 10px;
+}
+
+.prices-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
