@@ -1,6 +1,4 @@
 
-@import "tailwindcss";
-
 /* Smooth scrolling */
 html {
     scroll-behavior: smooth;
@@ -108,7 +106,7 @@ button {
 }
 
 button:hover {
-    background-message: #967096;
+    background-color: #967096;
 }
 
 .loading-message {
@@ -119,9 +117,12 @@ button:hover {
     color: var(--mizan-green)
 }
 
-.error-message {
+.error-message p {
     color: red;
     padding: 10px;
+     background-color: #fee2e2;
+    padding: 10px;
+    border-radius: 8px;
 }
 
 .prices-container {
@@ -129,4 +130,87 @@ button:hover {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
 }
+.history-controls {
+    display:flex;
+    gap: 15px;
+    align-items: end;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
 
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.chart-container {
+    width: 100%;
+    margin-top: 20px;
+}
+
+#calculator-form {
+    display:flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+    margin-top: 20px;
+}
+
+.calculator-result {
+    background-color: #F5F5F0;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+.calculator-result h3 {
+    color: var(--mizan-gold);
+    font-size: 25px;
+}
+
+.field-error {
+    color: red;
+}
+
+.request-section summary {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#requests-log {
+    margin-top: 15px;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #292929;
+    color: white;
+}
+
+.footer p {
+    color: white;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .header-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .update-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .history-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    button {
+        width: 100%;
+    }
+}

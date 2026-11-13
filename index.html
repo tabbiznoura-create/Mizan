@@ -9,7 +9,7 @@
       content="Connexion d’une application Web à des services et données externes"
     />
     <link rel="stylesheet" href="src/style.css" />
-    <script type="module" src="src/main.js" defer></script>
+    <script type="module" src="src/main.js"></script>
 </head>
 <body>
 
@@ -36,13 +36,13 @@
 <div>
     <div>
         <h2>Cours du marché</h2>
-        <p>Consultez les prix actueks de l'or et de l'argent.</p>
+        <p>Consultez les prix actuels de l'or et de l'argent.</p>
     </div>
 
     <div class="currency-control">
-        <label for="currency-control">Devise :</label>
+        <label for="currency-select">Devise :</label>
 
-    <select id="currency-select">
+    <select id="currency-select" name="currency">
         <option value="MAD">MAD</option>
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
@@ -86,7 +86,7 @@
 
 <!-- section historique -->
 <section class="history-section">
-    <div class="section-heder">
+    <div class="section-header">
         <div>
             <h2>Historique des prix</h2>
             <p>Consultez l'évolution des cours.</p>
@@ -103,7 +103,7 @@
 
             <div class="form-group">
 
-            <label for="history-period">Périod</label>
+            <label for="history-period">Période</label>
             <select id="history-period">
                 <option value="7">7 derniers jours</option>
                 <option value="30">30 derniers jours</option>
@@ -121,7 +121,7 @@
  <div class="chart-container">
     <canvas
     id="history-chart"
-    aria-label="Graphique de l'évomution des prix"
+    aria-label="Graphique de l'évolution des prix"
     role="img">  
     </canvas>
  </div>
@@ -132,18 +132,18 @@
     <div class="section-header">
         <div>
             <h2>Estimateur de bijou</h2>
-            <p>Estimez la valeur des votre bijou selon son poids</p>
+            <p>Estimez la valeur de votre bijou selon son poids</p>
         </div>
     </div>
 
     <form id="calculator-form">
-        <!-- coix du métal -->
+        <!-- choix du métal -->
          <div class="form-group">
             <label for="calculator-metal">
-                Coisir un métal
+                Choisir un métal
             </label>
 
-            <select id="calculator-metal" required>
+            <select id="calculator-metal" name="calcolator-metal" required>
                 <!-- options générees par JavaScript -->
             </select>
          </div>
@@ -155,6 +155,7 @@
             </label>
             <input type="number"
                     id="weight"
+                    name="weight"
                     placeholder="Exemple : 10"
                     min="0"
                     step="any"
@@ -180,7 +181,7 @@
  <!-- Journal des requetes -->
   <section class="request-section">
     <details>
-        <summary>Journal des requetes</summary>
+        <summary>Journal des requêtes</summary>
         <div id="requests-log">
             <!-- Les requetes seront ajoutées par JavaScript -->
         </div>
