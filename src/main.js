@@ -5,6 +5,26 @@ import {
     getSilverHistoricalPrices
 } from "./api.js";
 
+const TROY_OUNCE = 31.1034768;
+
+const connectionStatus = document.getElementById("connection-status");
+
+function checkConnection() {
+
+    if (navigator.onLine) {
+
+        connectionStatus.textContent = "🟢 En ligne";
+
+    } else {
+
+        connectionStatus.textContent = "🔴 Hors ligne";
+    }
+}
+
+checkConnection();
+
+window.addEventListener("online", checkConnection);
+window.addEventListener("offline", checkConnection);
 
 // 1. Récupérer le select
 const currencySelect = document.getElementById("currency-select");
@@ -52,6 +72,18 @@ let currentFxRate = 1;
 const historyPeriod = document.getElementById("history-period");
 const historyButton = document.getElementById("history-button");
 const historyMessage = document.getElementById("history-message");
+
+// Éléments de l'estimateur
+const calculatorForm = document.getElementById("calculator-form");
+const calculatorMetal = document.getElementById("calculator-metal");
+const weightInput = document.getElementById("weight");
+const weightError = document.getElementById("weight-error");
+
+const calculatorResult = document.getElementById("calculator-result");
+const estimatedPrice = document.getElementById("estimated-price");
+
+// Les prix actuels des métaux
+let currentMetals = [];
 
 // 2. Créer une carte
 function createCard(metal) {
@@ -115,6 +147,13 @@ function createCard(metal) {
     return card;
 }
 
+function calculateJewelryValue(weight, price) {
+
+    const result = weight * price;
+
+    return result;
+}
+
 
 // 3. Charger les prix
 async function init() {
@@ -123,7 +162,24 @@ async function init() {
     const errorText = document.getElementById("error-text");
     const pricesContainer = document.getElementById("prices-container");
 
-    errorMessage.hidden = true;
+    const loadingMessage = document.getElementById("loading-message");
+    const successMessage = document.getElementById("success-message");
+
+    const refreshButton = document.getElementById("refresh-button");
+    const retryButton = document.getElementById("retry-button");
+
+    // Afficher Loading
+loadingMessage.hidden = false;
+
+// Cacher les autres messages
+errorMessage.hidden = true;
+successMessage.hidden = true;
+
+// Désactiver les boutons pendant le chargement
+refreshButton.disabled = true;
+retryButton.disabled = true;
+currencySelect.disabled = true;
+historyButton.disabled = true;
 
     try {
 
@@ -136,6 +192,8 @@ currentFxRate = data.fx_rate || 1;
 // Réinitialiser les historiques
 goldHistory = [];
 silverHistory = [];
+
+
 
 // Historique de l'or
 try {
@@ -191,13 +249,20 @@ try {
         const metals = [];
 
         if (data.xau) {
+                const goldPrice = data.xau.price / TROY_OUNCE;
+
+    let previousGold = null;
+
+    if (previousGoldPrice !== null) {
+        previousGold = previousGoldPrice / TROY_OUNCE;
+    }
 
             metals.push({
                 name: "Or",
-                price: data.xau.price,
+                price: goldPrice,
                 currency: data.xau.currency,
-                unit: data.xau.unit,
-                previousPrice: previousGoldPrice
+                unit: "gramme",
+                previousPrice: previousGold
             });
         }
 
@@ -206,15 +271,41 @@ try {
             data.silver_usd_oz !== undefined
         ) {
 
+                const silverPrice =
+        (data.silver_usd_oz * fxRate) / TROY_OUNCE;
+
+    let previousSilver = null;
+
+    if (previousSilverPrice !== null) {
+        previousSilver = previousSilverPrice / TROY_OUNCE;
+    }
+
             metals.push({
                 name: "Argent",
-                price: data.silver_usd_oz * fxRate,
+                price: silverPrice,
                 currency: selectedCurrency,
-                unit: "troy_oz",
-                previousPrice: previousSilverPrice
+                unit: "gramme",
+                previousPrice: previousSilver
             });
         }
 
+        // Garder les prix pour l'estimateur
+currentMetals = metals;
+
+// Vider le select
+calculatorMetal.replaceChildren();
+
+// Ajouter les métaux
+metals.forEach(function(metal) {
+
+    const option = document.createElement("option");
+
+    option.value = metal.name;
+    option.textContent = metal.name;
+
+    calculatorMetal.append(option);
+
+});
 
         // 8. Supprimer les anciennes cartes
         pricesContainer.replaceChildren();
@@ -236,16 +327,71 @@ try {
         document.getElementById("last-update").textContent =
             date.toLocaleString("fr-FR");
 
+// Afficher Success
+successMessage.hidden = false;
+
 
     } catch (error) {
 
+        // Afficher Error
         errorMessage.hidden = false;
 
-        errorText.textContent =
-            "Impossible de récupérer les cours.";
+        // Choisir le message selon l'erreur
+        if (error.message === "offline") {
+
+            errorText.textContent =
+                "Vous êtes hors ligne. Vérifiez votre connexion.";
+
+        } else if (error.message === "network") {
+
+            errorText.textContent =
+                "Erreur réseau. Impossible de contacter le serveur.";
+
+        } else if (error.message === "quota") {
+
+            errorText.textContent =
+                "Quota dépassé. Réessayez après une minute.";
+
+        } else if (error.message === "json") {
+
+            errorText.textContent =
+                "La réponse de l'API est illisible.";
+
+        } else if (error.message.startsWith("http-")) {
+
+const status = Number(error.message.replace("http-", ""));
+
+            if (status >= 400 && status < 500) {
+
+                errorText.textContent =
+                    "Erreur HTTP 4xx : requête incorrecte (" + status + ").";
+
+            } else if (status >= 500) {
+
+                errorText.textContent =
+                    "Erreur HTTP 5xx : problème du serveur (" + status + ").";
+            }
+
+        } else {
+
+            errorText.textContent =
+                "Une erreur inattendue est survenue.";
+        }
 
         console.log(error.message);
+
+    } finally {
+
+        // Cacher Loading
+        loadingMessage.hidden = true;
+
+        // Réactiver les boutons
+        refreshButton.disabled = false;
+        retryButton.disabled = false;
+        currencySelect.disabled = false;
+        historyButton.disabled = false;
     }
+
 }
 
 
@@ -409,8 +555,6 @@ function drawChart(points) {
 
 }
 
-historyButton.addEventListener("click", showHistory);
-
 function showHistory() {
 
     // Récupérer le métal choisi
@@ -455,7 +599,7 @@ function showHistory() {
 
         chartPoints.push({
             date: date,
-            price: item.c * currentFxRate
+            price: (item.c * currentFxRate) / TROY_OUNCE
         });
 
     });
@@ -477,13 +621,77 @@ function showHistory() {
 
     historyMessage.hidden = false;
 
-    // Dessiner le graphique
+    // Dessiner le graphique qui lier les deux functions
     drawChart(chartPoints);
 }
 
 
 // Bouton Afficher
 historyButton.addEventListener("click", showHistory);
+
+
+calculatorForm.addEventListener("submit", function(event) {
+
+    // Empêcher le rechargement
+    event.preventDefault();
+
+    // Effacer les anciens messages
+    weightError.textContent = "";
+    calculatorResult.hidden = true;
+
+    // Récupérer le poids
+    const weightText = weightInput.value;
+
+    // Vérifier si le champ est vide
+    if (weightText.trim() === "") {
+
+        weightError.textContent = "Veuillez saisir le poids.";
+
+        return;
+    }
+
+    const weight = Number(weightText);
+
+    // Vérifier le poids
+    if (isNaN(weight) || weight <= 0) {
+
+        weightError.textContent = "Veuillez saisir un poids positif.";
+
+        return;
+    }
+
+    // Chercher le métal choisi
+    let selectedMetal = null;
+
+    currentMetals.forEach(function(metal) {
+
+        if (metal.name === calculatorMetal.value) {
+            selectedMetal = metal;
+        }
+
+    });
+
+    if (selectedMetal === null) {
+
+        weightError.textContent = "Métal indisponible.";
+
+        return;
+    }
+
+    // Calculer la valeur
+    const result = calculateJewelryValue(
+        weight,
+        selectedMetal.price
+    );
+
+    // Afficher le résultat
+    estimatedPrice.textContent =
+        result.toFixed(2) + " " + selectedMetal.currency;
+
+    calculatorResult.hidden = false;
+
+});
+
 
 // Lancer l'application
 init();
