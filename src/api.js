@@ -3,47 +3,108 @@ const API_URL = "https://xaus.com/api/v1/spot";
 const HISTORY_URL = "https://xaus.com/api/v1/history";
 const CHART_URL = "https://xaus.com/api/v1/chart";
 
+
+// Ajouter une requête dans le journal
+function addRequestLog(method, url, status, duration) {
+
+    const requestsLog = document.getElementById("requests-log");
+
+    // Vérifier si le journal existe
+    if (!requestsLog) {
+        return;
+    }
+
+    // Créer une ligne
+    const requestItem = document.createElement("div");
+    requestItem.className = "request-log-item";
+
+    // Afficher la méthode et l'URL
+    const requestTitle = document.createElement("p");
+
+    requestTitle.textContent = method + " - " + url;
+
+    // Afficher le statut et la durée
+    const requestInfo = document.createElement("p");
+
+    requestInfo.textContent =
+        "Statut : " + status +
+        " | Durée : " + duration + " ms";
+
+    requestItem.append(requestTitle, requestInfo);
+
+    // Ajouter la nouvelle requête en haut
+    requestsLog.prepend(requestItem);
+
+    // Garder seulement les 10 dernières requêtes
+    if (requestsLog.children.length > 10) {
+        requestsLog.removeChild(requestsLog.lastElementChild);
+    }
+}
+
+
 // Fonction pour récupérer les données
 async function getData(url) {
 
-    // Vérifier la connexion
-    if (!navigator.onLine) {
-        throw new Error("offline");
-    }
+    // Enregistrer l'heure de départ
+    const startTime = Date.now();
 
-    let response;
+    let status = "Non envoyé";
 
     try {
 
-        response = await fetch(url);
+        // Vérifier la connexion
+        if (!navigator.onLine) {
+            status = "Hors ligne";
+            throw new Error("offline");
+        }
 
-    } catch (error) {
+        let response;
 
-        throw new Error("network");
-    }
+        try {
 
-    // Vérifier le quota
-    if (response.status === 429) {
-        throw new Error("quota");
-    }
+            response = await fetch(url);
 
-    // Vérifier les erreurs HTTP
-    if (!response.ok) {
-        throw new Error("http-" + response.status);
-    }
+        } catch (error) {
 
-    // Lire le JSON
-    try {
+            status = "Erreur réseau";
+            throw new Error("network");
+        }
 
-        const data = await response.json();
+        // Récupérer le code HTTP
+        status = response.status;
 
-        return data;
+        // Vérifier le quota
+        if (response.status === 429) {
+            throw new Error("quota");
+        }
 
-    } catch (error) {
+        // Vérifier les erreurs HTTP
+        if (!response.ok) {
+            throw new Error("http-" + response.status);
+        }
 
-        throw new Error("json");
+        // Lire le JSON
+        try {
+
+            const data = await response.json();
+
+            return data;
+
+        } catch (error) {
+
+            throw new Error("json");
+        }
+
+    } finally {
+
+        // Calculer la durée
+        const duration = Date.now() - startTime;
+
+        // Enregistrer la requête
+        addRequestLog("GET", url, status, duration);
     }
 }
+
 
 // Prix actuels
 export async function getPrices(currency = "USD") {
@@ -71,12 +132,6 @@ export async function getSilverHistoricalPrices() {
     const data = await getData(
         `${CHART_URL}?symbol=silver&range=3mo&interval=1d`
     );
-
-// CHART_URL le titre initial
-// symbol=silver: la demande de silver
-// range=3mo: nous besoin de 3 mois
-// interval=1d: chaque point présenté un jour
-
 
     return data.points;
 }

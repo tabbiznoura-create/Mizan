@@ -220,3 +220,25 @@ button:hover {
     width: 100%;
     height: auto;
 }
+
+/* Journal des requêtes */
+
+#requests-log {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.request-log-item {
+    padding: 12px;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+}
+
+.request-log-item p {
+    margin: 4px 0;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}

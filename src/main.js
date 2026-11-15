@@ -5,6 +5,8 @@ import {
     getSilverHistoricalPrices
 } from "./api.js";
 
+
+
 const TROY_OUNCE = 31.1034768;
 
 const connectionStatus = document.getElementById("connection-status");
