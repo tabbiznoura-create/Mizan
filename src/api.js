@@ -36,9 +36,14 @@ export async function getHistoricalPrices() {
 // Historique de l'argent
 export async function getSilverHistoricalPrices() {
 
-    const url = `${CHART_URL}?symbol=silver&range=5d&interval=1d`;
+        const response = await fetch(
+            `${CHART_URL}?symbol=silver&range=5d&interval=1d`
+        );
 
-    const response = await fetch(url);
+// CHART_URL le titre initial
+// symbol=silver: la demande de silver
+// range=3mo: nous besoin de 3 mois
+// interval=1d: chaque point présenté un jour
 
     if (!response.ok) {
         throw new Error("Erreur historique de l'argent");
