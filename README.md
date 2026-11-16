@@ -116,25 +116,34 @@ La valeur estimée du bijou est calculée avec une fonction pure :
 Ajouter dans cette section des captures d'écran de l'application montrant :
 
 - Le tableau de bord et les cartes de prix.
+
+![Dashboard](src/screenshots/Dashboard.png)
+
 - Le changement de devise.
+![Dashboard](src/screenshots/devise-usd.png)
+![Dashboard](src/screenshots/devise-mad.png)
+
 - Le graphique historique de l'or et de l'argent.
+![Dashboard](src/screenshots/Graphique-historique-de-l'argent.png)
+![Dashboard](src/screenshots/Graphique-historique-de-l'or.png)
+
 - Le résultat de l'estimateur.
+![Dashboard](src/screenshots/Resultat-de-l'estimateur.png)
+
 - L'état de chargement et l'état de succès.
+![Dashboard](src/screenshots/Etat-de-succèe.png)
+
 - Le message d'erreur hors ligne.
+![Dashboard](src/screenshots/Message-d'erreur-hors-ligne.png)
+
 - Le journal des requêtes.
+![Dashboard](src/screenshots/Journal-des-requetes.png)
 
 Les images seront placées dans le dossier `screenshots/`.
 
-## 7. Échantillons de données JSON
 
-Le dossier `samples/` contient des réponses JSON réelles récupérées depuis l'API, afin de conserver des exemples de données pour les tests hors ligne.
 
-Fichiers prévus :
-- `spot.json` : réponse des prix actuels.
-- `gold-history.json` : historique de l'or.
-- `silver-chart.json` : historique de l'argent.
-
-## 8. Installation et lancement
+## 7. Installation et lancement
 
 1. Cloner le dépôt GitHub.
 2. Ouvrir le projet dans Visual Studio Code.
@@ -143,10 +152,11 @@ Fichiers prévus :
 
 Aucune bibliothèque JavaScript externe n'est nécessaire pour le graphique.
 
-## 9. Démonstration
+## 8. Démonstration
 
-- **Dépôt GitHub :** À compléter.
-- **Démo GitHub Pages :** À compléter.
+- **Dépôt GitHub : https://github.com/tabbiznoura-create/Mizan.git
+
+- **Démo GitHub Pages : https://tabbiznoura-create.github.io/Mizan/
 
 ---
 
